@@ -9,6 +9,7 @@ import AddFolder from "../AddFolder";
 import AddNote from "../AddNote";
 import ApiContext from "../ApiContext";
 import config from "../config";
+import ErrorBoundry from "../ErrorBoundry";
 import "./App.css";
 
 class App extends Component {
@@ -75,18 +76,21 @@ class App extends Component {
       deleteNote: this.handleDeleteNote,
     };
     return (
-      <ApiContext.Provider value={value}>
-        <div className="App">
-          <nav className="App__nav">{this.renderNavRoutes()}</nav>
-          <header className="App__header">
-            <h1>
-              <Link to="/">Noteful</Link>{" "}
-              <FontAwesomeIcon icon="check-double" />
-            </h1>
-          </header>
-          <main className="App__main">{this.renderMainRoutes()}</main>
-        </div>
-      </ApiContext.Provider>
+      <ErrorBoundry>
+        <ApiContext.Provider value={value}>
+          <div className="App">
+            <nav className="App__nav">{this.renderNavRoutes()}</nav>
+            <header className="App__header">
+              <h1>
+                <Link to="/">Noteful</Link>{" "}
+                <FontAwesomeIcon icon="check-double" />
+              </h1>
+            </header>
+            <main className="App__main">{this.renderMainRoutes()}</main>
+          </div>
+        </ApiContext.Provider>
+
+      </ErrorBoundry>
     );
   }
 }

@@ -1,17 +1,20 @@
 import React from "react";
 import config from "./config";
 import PropType from "prop-types";
+import ApiContext from './ApiContext'
 
 export default class AddNote extends React.Component {
   constructor() {
     super();
     this.state = {
-      foldersList: [],
       folderId: null,
       noteName: "",
       content: "",
+      modified: new Date()
+
     };
   }
+  static contextType = ApiContext;
   async componentDidMount() {
     try {
       const folders = await fetch(`${config.API_ENDPOINT}/folders`);
@@ -24,6 +27,7 @@ export default class AddNote extends React.Component {
   updateFolderId = (event) => {
     event.preventDefault();
     const folderOptionIndex = event.currentTarget.selectedIndex;
+    console.log(folderOptionIndex);
     const folderOption = this.state.foldersList[folderOptionIndex - 1].id;
     this.setState({ folderId: folderOption });
   };
@@ -44,8 +48,9 @@ export default class AddNote extends React.Component {
       },
       body: JSON.stringify({
         name: this.state.noteName,
-        folder_id: this.state.folderId,
+        folderId: this.state.folderId,
         content: this.state.content,
+        modified: this.state.modified
       }),
     })
       .then((res) => {
@@ -59,16 +64,15 @@ export default class AddNote extends React.Component {
   };
 
   render() {
-    const selectOptions = this.state.foldersList.map((folder) => (
-      <option key={folder.id} id={folder.id}>
-        {folder.name}
-      </option>
-    ));
+    const { folders=[] } = this.context
     return (
       <form className="addNote" onSubmit={this.handelSubmit}>
         <select onChange={this.updateFolderId} required>
           <option value="">-- Choose a folder --</option>
-          {selectOptions}
+          {folders.map(folder =>
+                <option key={folder.id} value={folder.id}>
+                  {folder.name}
+                  </option>)}
         </select>
         <br />
         <input

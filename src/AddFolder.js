@@ -10,6 +10,7 @@ export default class AddFolder extends Component {
             folderName:''
         }
     }
+    static contextType = ApiContext
     handleChange = (event) => {
         event.preventDefault()
         this.setState({folderName: event.currentTarget.value})
@@ -32,7 +33,6 @@ export default class AddFolder extends Component {
         .catch(error => {
             console.error({ error })
         })
-        this.props.history.push('/')
     }
     render () {
         return (
