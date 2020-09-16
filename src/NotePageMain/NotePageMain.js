@@ -3,7 +3,7 @@ import Note from '../Note/Note'
 import ApiContext from '../ApiContext'
 import { findNote } from '../notes-helpers'
 import './NotePageMain.css'
-import API_ENDPOINT from '../config'
+ 
 
 export default class NotePageMain extends React.Component {
   static defaultProps = {
@@ -12,17 +12,6 @@ export default class NotePageMain extends React.Component {
     }
   }
   static contextType = ApiContext;
-  handleDeleteNote = async noteId => {
-    try {
-      this.props.history.push(`/`)
-      await fetch(`${API_ENDPOINT}/notes/${noteId}`, {
-        method: "DELETE"
-      });
-    } catch (error) {
-      console.log(error)
-    }
-    }
-    
     render() {
     const { notes=[] } = this.context
     const { noteId } = this.props.match.params

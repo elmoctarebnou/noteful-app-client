@@ -27,7 +27,7 @@ export default class AddNote extends React.Component {
   updateFolderId = (event) => {
     event.preventDefault();
     const folderOptionIndex = event.currentTarget.selectedIndex;
-    console.log(folderOptionIndex);
+ 
     const folderOption = this.state.foldersList[folderOptionIndex - 1].id;
     this.setState({ folderId: folderOption });
   };
@@ -54,8 +54,8 @@ export default class AddNote extends React.Component {
       }),
     })
       .then((res) => {
-        if (!res.ok) return res.json().then((e) => Promise.reject(e));
-        return res.json();
+        if (!res.ok) return res.json().then(e => Promise.reject(e));
+        return this.context.refresh();
       })
       .catch((error) => {
         console.error({ error });

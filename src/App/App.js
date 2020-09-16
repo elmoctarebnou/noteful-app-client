@@ -18,7 +18,7 @@ class App extends Component {
     folders: [],
   };
 
-  componentDidMount() {
+  fetchData = () => {
     Promise.all([
       fetch(`${config.API_ENDPOINT}/notes`),
       fetch(`${config.API_ENDPOINT}/folders`),
@@ -36,6 +36,9 @@ class App extends Component {
       .catch((error) => {
         console.error({ error });
       });
+  }
+  componentDidMount() {
+    this.fetchData()
   }
 
   handleDeleteNote = (noteId) => {
@@ -69,12 +72,18 @@ class App extends Component {
       </>
     );
   }
+  addNote = (note) =>{
+    const { notes } = this.state;
+    this.setState({ notes: [...notes, note]})
+    }
   render() {
-    const value = {
-      notes: this.state.notes,
-      folders: this.state.folders,
-      deleteNote: this.handleDeleteNote,
-    };
+      const value = {
+        notes: this.state.notes,
+        folders: this.state.folders,
+        deleteNote: this.handleDeleteNote,
+        addNote: this.addNote,
+        refresh: this.fetchData
+      };
     return (
       <ErrorBoundry>
         <ApiContext.Provider value={value}>

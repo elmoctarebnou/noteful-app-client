@@ -26,13 +26,13 @@ export default class AddFolder extends Component {
                 name: this.state.folderName})
         })
         .then(res => {
-            if (!res.ok)
-              return res.json().then(e => Promise.reject(e))
-            return res.json();
+            if (!res.ok) return res.json().then(e => Promise.reject(e))
+            return this.context.refresh();
           })
         .catch(error => {
             console.error({ error })
         })
+        this.props.history.push('/');
     }
     render () {
         return (
