@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ApiContext from "../ApiContext";
 import config from "../config";
 import "./Note.css";
+import PropType from "prop-types";
+import ErrorBoundry from "../ErrorBoundry";
 
 export default class Note extends React.Component {
   static defaultProps = {
@@ -29,8 +31,7 @@ export default class Note extends React.Component {
       .then(() => {
         this.context.deleteNote(noteId);
         // allow parent to perform extra behaviour
-        this.props.onDeleteNote(noteId);
-         
+        this.props.onDelete();
       })
       .catch((error) => {
         console.error({ error });
@@ -40,24 +41,33 @@ export default class Note extends React.Component {
   render() {
     const { name, id, modified } = this.props;
     return (
-      <div className="Note">
-        <h2 className="Note__title">
-          <Link to={`/note/${id}`}>{name}</Link>
-        </h2>
-        <button
-          className="Note__delete"
-          type="button"
-          onClick={this.handleClickDelete}
-        >
-          <FontAwesomeIcon icon="trash-alt" /> remove
-        </button>
-        <div className="Note__dates">
-          <div className="Note__dates-modified">
-            Modified{" "}
-            <span className="Date">{format(modified, "Do MMM YYYY")}</span>
+      <ErrorBoundry>
+        <div className="Note">
+          <h2 className="Note__title">
+            <Link to={`/note/${id}`}>{name}</Link>
+          </h2>
+          <button
+            className="Note__delete"
+            type="button"
+            onClick={this.handleClickDelete}
+          >
+            <FontAwesomeIcon icon="trash-alt" /> remove
+          </button>
+          <div className="Note__dates">
+            <div className="Note__dates-modified">
+              Modified{" "}
+              <span className="Date">{format(modified, "Do MMM YYYY")}</span>
+            </div>
           </div>
         </div>
-      </div>
+      </ErrorBoundry>
     );
   }
 }
+Note.defaultProps = { onDelete: () => {} }
+Note.propTypes = {
+  id: PropType.string.isRequired,
+  name: PropType.string.isRequired,
+  modified: PropType.instanceOf(Date).isRequired,
+  onDelete: PropType.func,
+};

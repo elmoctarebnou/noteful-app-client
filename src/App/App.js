@@ -36,9 +36,9 @@ class App extends Component {
       .catch((error) => {
         console.error({ error });
       });
-  }
+  };
   componentDidMount() {
-    this.fetchData()
+    this.fetchData();
   }
 
   handleDeleteNote = (noteId) => {
@@ -72,18 +72,18 @@ class App extends Component {
       </>
     );
   }
-  addNote = (note) =>{
+  addNote = (note) => {
     const { notes } = this.state;
-    this.setState({ notes: [...notes, note]})
-    }
+    this.setState({ notes: [...notes, note] });
+  };
   render() {
-      const value = {
-        notes: this.state.notes,
-        folders: this.state.folders,
-        deleteNote: this.handleDeleteNote,
-        addNote: this.addNote,
-        refresh: this.fetchData
-      };
+    const value = {
+      notes: this.state.notes,
+      folders: this.state.folders,
+      deleteNote: this.handleDeleteNote,
+      addNote: this.addNote,
+      refresh: this.fetchData,
+    };
     return (
       <ErrorBoundry>
         <ApiContext.Provider value={value}>
@@ -98,7 +98,6 @@ class App extends Component {
             <main className="App__main">{this.renderMainRoutes()}</main>
           </div>
         </ApiContext.Provider>
-
       </ErrorBoundry>
     );
   }
